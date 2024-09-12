@@ -34,6 +34,23 @@ def calcular_promedios_semanales(temperaturas):
     return promedios_semanales
 
 
+def calcular_temperatura_promedio_por_ciudad(temperaturas):
+    """
+    Calcula el promedio de temperaturas de cada ciudad durante todo el período.
+    :param temperaturas: Matriz 3D de temperaturas.
+    :return: Lista de promedios de temperaturas por ciudad.
+    """
+    num_ciudades, num_dias_semana, num_semanas = temperaturas.shape
+    promedios_ciudad = np.zeros(num_ciudades)
+
+    for ciudad in range(num_ciudades):
+        temperaturas_ciudad = temperaturas[ciudad, :, :]
+        promedio_ciudad = np.mean(temperaturas_ciudad)
+        promedios_ciudad[ciudad] = promedio_ciudad
+
+    return promedios_ciudad
+
+
 def animar(i):
     """
     Actualiza la animación para el frame i.
@@ -62,13 +79,18 @@ def main():
     # Calcular promedios semanales
     promedios_semanales = calcular_promedios_semanales(temperaturas)
 
+    # Calcular promedios de temperatura por ciudad
+    promedios_ciudad = calcular_temperatura_promedio_por_ciudad(temperaturas)
+
     # Mostrar los resultados en la consola
     for ciudad in range(num_ciudades):
         for semana in range(num_semanas):
             print(
                 f'Ciudad {ciudad + 1}, Semana {semana + 1}: Promedio de temperatura = {promedios_semanales[ciudad, semana]:.2f}°C')
 
-    # Configurar la animations
+        print(f'Ciudad {ciudad + 1}: Promedio de temperatura total = {promedios_ciudad[ciudad]:.2f}°C')
+
+    # Configurar la animación
     fig = plt.figure()
     ani = animation.FuncAnimation(fig, animar, frames=num_semanas, repeat=False)
     plt.show()
